@@ -1,26 +1,26 @@
-const path = require('path');
-const express = require('express');
-const OS = require('os');
-const bodyParser = require('body-parser');
-const mongoose = require("mongoose");
+import path from 'path';
+import express from 'express';
+import OS from 'os';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
-const cors = require('cors')
 
-
-app.use(bodyParser.json());
+app.use(express.json()); // This replaces bodyParser.json()
 app.use(express.static(path.join(__dirname, '/')));
-app.use(cors())
+app.use(cors());
 
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}, function (err) {
-    if (err) {
-        console.log("error!! " + err)
-    } else {
-        //  console.log("MongoDB Connection Successful")
-    }
-})
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        console.log("MongoDB Connection Successful");
+    })
+    .catch((err) => {
+        console.log("error!! " + err);
+    });
 
 var Schema = mongoose.Schema;
 
@@ -79,4 +79,4 @@ app.listen(3000, () => {
 })
 
 
-module.exports = app;
+export default app;
