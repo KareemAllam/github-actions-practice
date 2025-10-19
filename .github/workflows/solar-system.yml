@@ -11,7 +11,7 @@ env:
   MONGO_URI: 'mongodb+srv://damola1446_db_user:<db_password>@cluster0.6aiz7eq.mongodb.net'
   MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}
   MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
-  
+
 
 jobs:
     unit-testing:
@@ -41,7 +41,7 @@ jobs:
           run: npm test
           
         - name: Archive Test Result
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
             name: Mocha-Test-Result
             path: test-results.xml
@@ -66,7 +66,7 @@ jobs:
           run: npm run coverage
         
         - name: Archive Test Result
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
             name: Code-Coverage-Result
             path: coverage
