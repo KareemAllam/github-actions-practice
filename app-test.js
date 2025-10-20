@@ -1,7 +1,7 @@
 import app from "./app.js";
 import { use, expect } from "chai";
 import chaiHttp from "chai-http";
-import { describe } from "mocha";
+import { describe, it } from 'mocha';
 const chai = use(chaiHttp);
 
 describe('Planets API Suite', () => {
