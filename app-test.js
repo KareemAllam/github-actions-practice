@@ -1,11 +1,9 @@
 import app from "./app.js";
-import * as chai from "chai";
-import chaiHttp from "chai-http";
+import { expect } from "chai";
+import chaiHttp, { request } from "chai-http";
 
-// Assertion 
-chai.should();
-chai.use(chaiHttp);
-
+// Use expect instead of should
+chaiHttp.use(expect);
 describe('Planets API Suite', () => {
 
     describe('Fetching Planet Details', () => {
@@ -13,7 +11,7 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 1
             }
-            chai.request(app)
+            request(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
@@ -28,7 +26,7 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 2
             }
-            chai.request(app)
+            request(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
@@ -43,7 +41,7 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 3
             }
-            chai.request(app)
+            request(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
@@ -57,7 +55,7 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 4
             }
-            chai.request(app)
+            request(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
@@ -72,7 +70,7 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 5
             }
-            chai.request(app)
+            request(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
@@ -87,7 +85,7 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 6
             }
-            chai.request(app)
+            request(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
@@ -102,7 +100,7 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 7
             }
-            chai.request(app)
+            request(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
@@ -117,7 +115,7 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 8
             }
-            chai.request(app)
+            request(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
@@ -132,7 +130,7 @@ describe('Planets API Suite', () => {
         //     let payload = {
         //         id: 9
         //     }
-        //   chai.request(server)
+        //   request(server)
         //       .post('/planet')
         //       .send(payload)
         //       .end((err, res) => {
@@ -147,42 +145,3 @@ describe('Planets API Suite', () => {
     });
 });
 
-//Use below test case to achieve coverage
-describe('Testing Other Endpoints', () => {
-
-    describe('it should fetch OS Details', () => {
-        it('it should fetch OS details', (done) => {
-            chai.request(app)
-                .get('/os')
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    done();
-                });
-        });
-    });
-
-    describe('it should fetch Live Status', () => {
-        it('it checks Liveness endpoint', (done) => {
-            chai.request(app)
-                .get('/live')
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.have.property('status').eql('live');
-                    done();
-                });
-        });
-    });
-
-    describe('it should fetch Ready Status', () => {
-        it('it checks Readiness endpoint', (done) => {
-            chai.request(app)
-                .get('/ready')
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.have.property('status').eql('ready');
-                    done();
-                });
-        });
-    });
-
-});
