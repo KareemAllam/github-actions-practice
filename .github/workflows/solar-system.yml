@@ -38,12 +38,13 @@ jobs:
         run: npm install
 
       - name: Unit Testing
-        run: npx mocha app-test.js --timeout 10000 --reporter mocha-junit-reporter --reporter-options mochaFile=${{ matrix.os }}-${{ matrix.nodejs_version }}-test-results.xml --exit
+        run: npm test
+
       - name: Archive Test Result
         uses: actions/upload-artifact@v4
         with:
-          name: Mocha-Test-Result
-          path: ${{matrix.os}}-${{matrix.nodejs_version}}-test-results.xml
+          name: ${{matrix.os}}-${{matrix.nodejs_version}}-test-results.xml
+          path: test-results.xml
 
   code_coverage:
     name: Code Coverage
