@@ -1,6 +1,7 @@
 import app from "./app.js";
 import { expect } from "chai";
-import chaiHttp, { request } from "chai-http";
+import chaiHttp from "chai-http";
+const { request } = chaiHttp;
 
 // Use expect instead of should
 chaiHttp.use(expect);
