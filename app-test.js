@@ -1,9 +1,7 @@
 import app from "./app.js";
 import { expect } from "chai";
-import chaiHttp from "chai-http";
-const { request } = chaiHttp;
+import chaiHttp, { request } from "chai-http";
 
-// Use expect instead of should
 chaiHttp.use(expect);
 describe('Planets API Suite', () => {
 
