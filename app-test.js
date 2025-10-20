@@ -1,8 +1,10 @@
 import app from "./app.js";
-import { expect } from "chai";
-import chaiHttp, { request } from "chai-http";
 
-chaiHttp.use(expect);
+import { use, expect } from "chai";
+import chaiHttp from "chai-http";
+
+const chai = use(chaiHttp);
+
 describe('Planets API Suite', () => {
 
     describe('Fetching Planet Details', () => {
@@ -10,13 +12,13 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 1
             }
-            request(app)
+            chai.request.execute(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.have.property('id').eql(1);
-                    res.body.should.have.property('name').eql('Mercury');
+                    expect(res.status).to.equal(200);
+                    expect(res.body.id).to.equal(1);
+                    expect(res.body.name).to.equal('Mercury');
                     done();
                 });
         });
@@ -25,13 +27,13 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 2
             }
-            request(app)
+            chai.request.execute(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.have.property('id').eql(2);
-                    res.body.should.have.property('name').eql('Venus');
+                    expect(res.status).to.equal(200);
+                    expect(res.body.id).to.equal(2);
+                    expect(res.body.name).to.equal('Venus');
                     done();
                 });
         });
@@ -40,13 +42,13 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 3
             }
-            request(app)
+            chai.request.execute(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.have.property('id').eql(3);
-                    res.body.should.have.property('name').eql('Earth');
+                    expect(res.status).to.equal(200);
+                    expect(res.body.id).to.equal(3);
+                    expect(res.body.name).to.equal('Earth');
                     done();
                 });
         });
@@ -54,13 +56,13 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 4
             }
-            request(app)
+            chai.request.execute(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.have.property('id').eql(4);
-                    res.body.should.have.property('name').eql('Mars');
+                    expect(res.status).to.equal(200);
+                    expect(res.body.id).to.equal(4);
+                    expect(res.body.name).to.equal('Mars');
                     done();
                 });
         });
@@ -69,13 +71,13 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 5
             }
-            request(app)
+            chai.request.execute(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.have.property('id').eql(5);
-                    res.body.should.have.property('name').eql('Jupiter');
+                    expect(res.status).to.equal(200);
+                    expect(res.body.id).to.equal(5);
+                    expect(res.body.name).to.equal('Jupiter');
                     done();
                 });
         });
@@ -84,13 +86,13 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 6
             }
-            request(app)
+            chai.request.execute(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.have.property('id').eql(6);
-                    res.body.should.have.property('name').eql('Saturn');
+                    expect(res.status).to.equal(200);
+                    expect(res.body.id).to.equal(6);
+                    expect(res.body.name).to.equal('Saturn');
                     done();
                 });
         });
@@ -99,13 +101,13 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 7
             }
-            request(app)
+            chai.request.execute(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.have.property('id').eql(7);
-                    res.body.should.have.property('name').eql('Uranus');
+                    expect(res.status).to.equal(200);
+                    expect(res.body.id).to.equal(7);
+                    expect(res.body.name).to.equal('Uranus');
                     done();
                 });
         });
@@ -114,33 +116,31 @@ describe('Planets API Suite', () => {
             let payload = {
                 id: 8
             }
-            request(app)
+            chai.request.execute(app)
                 .post('/planet')
                 .send(payload)
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.have.property('id').eql(8);
-                    res.body.should.have.property('name').eql('Neptune');
+                    expect(res.status).to.equal(200);
+                    expect(res.body.id).to.equal(8);
+                    expect(res.body.name).to.equal('Neptune');
                     done();
                 });
         });
 
-        // it('it should fetch a planet named Pluto', (done) => {
-        //     let payload = {
-        //         id: 9
-        //     }
-        //   request(server)
-        //       .post('/planet')
-        //       .send(payload)
-        //       .end((err, res) => {
-        //             res.should.have.status(200);
-        //             res.body.should.have.property('id').eql(9);
-        //             res.body.should.have.property('name').eql('Sun');
-        //         done();
-        //       });
-        // });
-
-
+        it('it should fetch a planet named Pluto', (done) => {
+            let payload = {
+                id: 9
+            }
+            chai.request.execute(app)
+                .post('/planet')
+                .send(payload)
+                .end((err, res) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body.id).to.equal(9);
+                    expect(res.body.name).to.equal('Sun');
+                    done();
+                });
+        });
     });
 });
 

@@ -4,17 +4,22 @@ import OS from 'os';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-app.use(express.json()); // This replaces bodyParser.json()
+app.use(express.json());
 app.use(express.static(path.join(__dirname, '/')));
 app.use(cors());
 
-mongoose.connect(process.env.MONGO_URI)
+const mongoURI = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}?retryWrites=true&w=majority&appName=${process.env.DB_CLUSTER}`;
+
+mongoose.connect(mongoURI)
     .then(() => {
         console.log("MongoDB Connection Successful");
     })
@@ -74,9 +79,9 @@ app.get('/ready', function (req, res) {
     });
 })
 
-app.listen(3000, () => {
-    console.log("Server successfully running on port - " + 3000);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server successfully running on port - ${PORT}`);
 })
-
 
 export default app;
