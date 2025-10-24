@@ -1,4 +1,4 @@
-name: Context testing
+name: Context Logging
 on: push
 
 jobs:
