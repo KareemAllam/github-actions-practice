@@ -34,13 +34,21 @@ jobs:
         with:
           node-version: ${{ matrix.nodejs_version }}
 
+      - name: Cache NPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+
       - name: Install Dependencies
         run: npm install
 
       - name: Unit Testing
+        id: nodejs-unit-testing
         run: npm test
 
       - name: Archive Test Result
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ${{matrix.os}}-${{matrix.nodejs_version}}-test-results.xml
