@@ -2,20 +2,19 @@ name: Workflow Filters and Activities
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "*/59 * * * *"
   push:
-    # Run on pushes to main; ignore feature/* branches
     branches:
       - main
     # branches-ignore:
     #   - 'feature/*'
   pull_request:
-    # Trigger only for opened and closed PRs on main
     types:
       - opened
       - closed
     branches:
       - main
-    # Skip runs when only README.md changes
     paths-ignore:
       - README.md
 
@@ -23,5 +22,4 @@ jobs:
   hello:
     runs-on: ubuntu-latest
     steps:
-      - name: Echo the event name
-        run: echo "This job ran for event ${{ github.event_name }}"
+      - run: echo "Executed for event ${{ github.event_name }}"
