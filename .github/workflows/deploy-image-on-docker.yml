@@ -10,23 +10,67 @@ env:
 
 jobs:
   docker:
+    permissions:
+      packages: write
+
     runs-on: ubuntu-latest
     steps:
-      - name: Docker Build
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build image for testing
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
+
+      - name: Docker Image Testing
         run: |
-          docker build \
-            -t ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
+          # List built images
+          docker images
+
+
+          # Run the container in detached mode
+          docker run --name solar-system-app -d \
+            -p 3000:3000 \
+            -e MONGO_URI=$MONGO_URI \
+            -e MONGO_USERNAME=$MONGO_USERNAME \
+            -e MONGO_PASSWORD=$MONGO_PASSWORD \
+            ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
+
+
+          # Display container IP address
+          echo "Container IP:" $(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' solar-system-app)
+
+
+          # Test the /live endpoint
+          echo "Testing /live endpoint"
+          wget -q -O - http://127.0.0.1:3000/live | grep live
+
       - name: Docker Login
         run: |
           docker login \
             --username ${{ vars.DOCKER_USERNAME }} \
             --password ${{ secrets.DOCKER_PASSWORD }}
-      - name: Docker Publish
-        run: |
-          docker push \
-            ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
-  deploy:
+      - name: GHCR Login
+        uses: docker/login-action@v2.2.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to registries
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
+
+  docker-run:
     if: github.ref == 'refs/heads/main'
     needs: docker
     runs-on: ubuntu-latest
