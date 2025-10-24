@@ -1,0 +1,47 @@
+name: Solar System Workflow
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - "feature/*"
+
+env:
+  DB_USERNAME: ${{ vars.DB_USERNAME }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_CLUSTER: ${{ secrets.DB_CLUSTER }}
+  DB_NAME: ${{ vars.DB_NAME }}
+
+jobs:
+  unit-testing:
+    name: Unit Testing
+    strategy:
+      matrix:
+        nodejs_version: [18, 19, 20]
+        os: [ubuntu-latest, macos-latest]
+        exclude:
+          - nodejs_version: [18]
+            os: [macos-latest]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup NodeJS Version
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.nodejs_version }}
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Unit Testing
+        run: npm test
+
+      - name: Archive Test Result
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{matrix.os}}-${{matrix.nodejs_version}}-test-results.xml
+          path: test-results.xml
