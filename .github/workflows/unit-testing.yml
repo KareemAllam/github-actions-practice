@@ -16,6 +16,17 @@ env:
 jobs:
   unit-testing:
     name: Unit Testing
+    container:
+      image: ghcr.io/node-and-packages:20
+      credentials:
+        username: alice
+        password: ${{ secrets.PWD }}
+
+    services:
+      mongodb-service:
+        image: mongo:latest
+        ports:
+          - 12345:27017
     strategy:
       matrix:
         nodejs_version: [18, 19, 20]
@@ -45,6 +56,9 @@ jobs:
 
       - name: Unit Testing
         id: nodejs-unit-testing
+        env:
+          MONGODB_HOST: mongodb-service
+          MONGODB_PORT: 12345
         run: npm test
 
       - name: Archive Test Result
